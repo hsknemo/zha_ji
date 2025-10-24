@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../static/vue/vue.js"></script>
+    <link rel="stylesheet" href="../../static/elementUI/element.css">
+    <script src="../../static/elementUI/element.js"></script>
+    <script src="../../static/BaseVueComponent.js"></script>
+</head>
+<body>
+<div class="playGround">
+    <table-content-fit :table-header="tableHeader" :table-data="tableData">
+    </table-content-fit>
+</div>
+</body>
+
+<script >
+  // 计算宽度库
+  class ElTableWidthGet {
+    constructor(prop) {
+      this.header = prop.header
+      this.prop = prop.prop || 'prop'
+    }
+
+    static new(prop) {
+      return new this(prop)
+    }
+
+    getWidthFromRealCell(prop) {
+      let doms = document.querySelectorAll(`td.query-table-${prop} .cell`)
+      let tr_doms = document.querySelectorAll(`th.query-table-${prop} .cell`)
+      let widthMap = []
+      doms.forEach(item => {
+        item.removeAttribute('lockWidth')
+        if (!item.getAttribute('lockWidth')) {
+          item.setAttribute('lockWidth', item.offsetWidth)
+        }
+        let width = Number(item.getAttribute('lockWidth'))
+        if (item.offsetWidth > width) {
+          width = item.offsetWidth
+        }
+        if (!width) {
+          widthMap.push(100)
+          return
+        }
+        widthMap.push(width)
+      })
+      tr_doms.forEach(item => {
+        item.removeAttribute('lockWidth')
+        if (!item.getAttribute('lockWidth')) {
+          item.setAttribute('lockWidth', item.offsetWidth)
+        }
+        let width = Number(item.getAttribute('lockWidth'))
+        widthMap.push(width)
+      })
+
+
+
+      // console.log(widthMap, doms, prop, 'doms')
+
+      return widthMap
+    }
+
+    getHeaderWidth() {
+      const obj = {}
+      const tableHeader = this.header
+      const prop = this.prop
+      tableHeader.forEach((item) => {
+        obj[item[prop]] = obj[item[prop]] || []
+        const width = this.getWidthFromRealCell(item[prop])
+        obj[item[prop]] = width.concat(obj[item[prop]])
+      })
+      tableHeader.forEach((item) => {
+        const maxWidth = obj[item[prop]].sort((a, b) => b - a)[0] + 100 + 'px'
+        item.width = maxWidth
+      })
+
+
+      return tableHeader
+    }
+  }
+  // 封装的表格
+  class Table extends BaseVueComonent {
+    constructor(arg) {
+      super(arg)
+    }
+
+    baseConfig() {
+      return {
+        props: {
+          tableData: {
+            type: Array,
+            default: () => ([])
+          },
+          tableHeader: {
+            type: Array,
+            default: () => ([])
+          }
+        },
+
+        mounted() {
+          this.$nextTick(this.init)
+        },
+
+
+        methods: {
+          init() {
+            this.tableHeader = ElTableWidthGet.new({
+              header: this.tableHeader,
+              // 指定读取的表头字段属性
+              prop: 'prop'
+            }).getHeaderWidth()
+
+            this.$forceUpdate()
+          },
+        },
+      }
+    }
+    baseHtml() {
+      return `
+           <el-table
+           class='g_table'
+            height="100%"
+            :data="tableData"
+             v-on='$listeners'>
+             <template >
+               <el-table-column v-for="(item, index) in tableHeader"
+               :fixed="item.fixed ? item.fixed : false"
+                 v-slot="slotScope" :key="index"
+                 :label="item.label"
+                  :prop="item.prop"
+                   :class-name="'query-table-' + item.prop"
+                 :width="item.width || 'auto'"
+                 >
+                 <div class="isSlot" v-if="item.isSlot">
+                   <slot :name="item.prop" v-if="item.isSlot" :prop="item.prop" :row="slotScope.row"
+                     :index="slotScope.$index"></slot>
+                 </div>
+                 <div class="cell" v-else>
+                   {{ slotScope.row[item.prop] }}
+                 </div>
+               </el-table-column>
+
+             </template>
+
+             <slot name="tableBefore">
+             </slot>
+           </el-table>
+        `
+    }
+  }
+
+  const prop = {
+    el: '.playGround',
+    components: {
+      'table-content-fit': Table.new().create()
+    },
+
+    data() {
+      return {
+        tableHeader: [{
+          label: '字段1',
+          prop: 'test1'
+        },
+          {
+            label: '字段2',
+            prop: 'test2'
+          }
+        ],
+        tableData: [{
+          test1: '测试1',
+          test2: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet in veniam quae eum alias impedit officia at necessitatibus, officiis error, porro, voluptates praesentium dolor? Sunt illum velit possimus dolores fuga.'
+        },
+
+          {
+            test1: '测试2',
+            test2: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet in veniam quae eum alias impedit officia at necessitatibus, officiis error, porro, voluptates praesentium dolor? Sunt illum velit possimus dolores fuga.'
+          },
+          {
+            test1: '测试3',
+            test2: 'Lorem iimpedit officia at necessitatibus, officiis error, porro, voluptates praesentium dolor? Sunt illum velit possimus dolores fuga.'
+          },
+        ]
+      }
+    },
+  }
+  new Vue(prop)
+</script>
+</html>

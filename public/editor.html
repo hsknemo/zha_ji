@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../lib/mapbox-gl.css" rel="stylesheet">
+    <script src="../lib/mapbox-gl.js"></script>
+    <script src="../lib/turf.min.js"></script>
+    <script src="../lib/moment.min.js"></script>
+
+</head>
+<body>
+<style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+    .mapboxgl-popup-content {
+        background-color: transparent !important;
+        border-radius: unset !important;
+        box-shadow: unset !important;
+        padding: unset!important;
+        pointer-events: auto;
+    }
+
+    .mapboxgl-popup-close-button, .mapboxgl-popup-tip {
+        display: none;
+    }
+
+    .self_point_container {
+        position: relative;
+        padding-top: 10px;
+        background-color: #fff;
+    }
+
+    .self_point_container .close {
+        position: absolute;
+        right: 5px;
+        top: 2px;
+    }
+
+    .container {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        animation: scaleAni .5s infinite ease-in-out;
+
+    }
+    @keyframes scaleAni {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
+    .ripple {
+        position: absolute;
+        top: 0;
+        left: 0;
+        --size: 100%;
+        width: var(--size);
+        height: var(--size);
+        /*width: 100px;*/
+        /*height: 100px;*/
+        border-radius: 50%;
+        background: rgba(220, 4, 4, 0.6); /* 增强透明度 */
+        animation: ripple .9s infinite linear;
+        pointer-events: none;
+    }
+
+    .ripple:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .ripple:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes ripple {
+        0% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        50% {
+            transform: scale(1.4); /* 更大缩放 */
+            opacity: 0.2;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+    }
+
+</style>
+
+
+<script>
+  window.onload = ev => {
+    parent.postMessage({
+      type: 'loaded',
+      received: true,
+      message: 'loaded'
+    }, '*');
+  }
+  self.onmessage = ev => {
+    let { css, js, html } = ev.data
+
+    if (html) {
+      let d = document.querySelector('#map')
+      d && d.remove()
+      document.body.insertAdjacentHTML('beforeend', `${html}`)
+    }
+
+    if (css) {
+      let d = document.querySelector('.self_style')
+      d && d.remove()
+      document.body.insertAdjacentHTML('beforeend', `<style class="self_style">${css}</style>`)
+    }
+
+
+    if (js) {
+      let d = document.querySelector('.self_js')
+      d && d.remove()
+      let script = document.createElement('script')
+      script.className = 'self_js'
+      script.innerHTML = `
+            ${js}
+          `
+      document.body.append(script)
+    }
+
+    parent.postMessage({
+      type: 'RESPONSE',
+      received: ev.data,
+      message: '消息已收到'
+    }, ev.origin);
+
+  }
+</script>
+</body>
+</html>

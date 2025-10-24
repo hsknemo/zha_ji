@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../lib/mapbox-gl.css" rel="stylesheet">
+    <script src="../lib/mapbox-gl.js"></script>
+    <script src="../lib/turf.min.js"></script>
+    <script src="../lib/moment.min.js"></script>
+</head>
+<body>
+<style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+    .mapboxgl-popup-content {
+        background-color: transparent !important;
+        border-radius: unset !important;
+        box-shadow: unset !important;
+        padding: unset!important;
+        pointer-events: auto;
+    }
+
+    .mapboxgl-popup-close-button, .mapboxgl-popup-tip {
+        display: none;
+    }
+
+    .self_point_container {
+        position: relative;
+        padding-top: 10px;
+        background-color: #fff;
+    }
+
+    .self_point_container .close {
+        position: absolute;
+        right: 5px;
+        top: 2px;
+    }
+
+    .container {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        animation: scaleAni .5s infinite ease-in-out;
+
+    }
+    @keyframes scaleAni {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
+    .ripple {
+        position: absolute;
+        top: 0;
+        left: 0;
+        --size: 100%;
+        width: var(--size);
+        height: var(--size);
+        /*width: 100px;*/
+        /*height: 100px;*/
+        border-radius: 50%;
+        background: rgba(220, 4, 4, 0.6); /* 增强透明度 */
+        animation: ripple .9s infinite linear;
+        pointer-events: none;
+    }
+
+    .ripple:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .ripple:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes ripple {
+        0% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        50% {
+            transform: scale(1.4); /* 更大缩放 */
+            opacity: 0.2;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+    }
+
+</style>
+
+<div id="map"></div>
+
+<script>
+  /**
+   * 课程11 封装简易地图框架
+   *
+   */
+  // 框架
+
+  /**
+   * 1 支持自定义图层 点 线 面
+   * 2 点击 点线面 可以弹出 popup 气泡
+   * 3 用更好的面向对象语法 去抽离  js  class
+   * 4 图层支持 隐藏 及 出现
+   * 5 图层支持 设置 zoom
+   */
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoiNGgzajgiLCJhIjoiY202cTRneXdpMDlheDJpb21rdGs2M3V6cSJ9.Ifg4pD0p8LxYmxmxwoTBNA';
+
+  const map = (window.map = new mapboxgl.Map({
+    container: 'map',
+    center: [121.74380266722233, 31.097567372835357],
+    zoom: 10,
+    style: 'mapbox://styles/mapbox/standard',
+    minZoom: 10,
+    maxZoom: 21,
+    preserveDrawingBuffer: true,
+  }));
+
+
+  map.on('load', () => {
+    // 地图创建完成 发送到全局
+    let mapCreatedEvent = new CustomEvent("mapCreatedEvent", {
+      detail: {
+        map,
+      },
+    });
+
+    // 发送到全局
+    window.dispatchEvent(mapCreatedEvent);
+  })
+  map.on('click', (ev) => {
+    console.log([ev.lngLat.lng, ev.lngLat.lat])
+
+    let layerMap = []
+    window.layerManager.forEach(item => {
+      layerMap.push(item.name)
+    })
+    console.log(layerMap)
+
+    const feature = map.queryRenderedFeatures(ev.point, {
+      layers: layerMap
+    });
+
+    if (feature && feature.length) {
+      let f = feature[0]
+      let layerId = f.layer.id
+      let data = f.properties.data
+      if (data) {
+        let object_json_data = JSON.parse(data)
+
+        console.log(layerId, object_json_data)
+
+        // 获取图层
+        let layer = window.layerManager.get(layerId)
+        let position = [ev.lngLat.lng, ev.lngLat.lat]
+        if (f.geometry.type === 'Point') {
+          position = f.geometry.coordinates
+        }
+        // 调用图层的showTip 方法
+        if (!layer.noneTips) {
+          layer.showTip({
+            position,
+            feature: f,
+            data: object_json_data
+          })
+        }
+
+      }
+      console.log(f)
+    }
+
+
+
+  })
+
+</script>
+</body>
+</html>
