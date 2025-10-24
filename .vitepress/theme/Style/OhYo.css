@@ -1,0 +1,32 @@
+:root {
+  --vp-default-color: rgb(128, 128, 128);
+  --vp-default-opacity-color: rgba(128, 128, 128, .3);
+  /* 标题 */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient( 135deg, #fff 15%, #353535);
+  --vp-c-indigo-1: #647eff !important;
+  /* 图标背景 */
+  --vp-home-hero-image-background-image: linear-gradient(135deg, #42d392 25%,#647eff);
+  --vp-home-hero-image-filter: blur(150px);
+  --vp-c-indigo-1: #42d392;
+  --oh-yo-default-color: rgb(128, 128, 128);
+
+  --vp-home-hero-image-background-image: linear-gradient(135deg, #000000 25%, #ffffff);
+}
+
+.vp-doc table {
+  margin: unset !important;
+}
+
+.el-table {
+  &,* {
+    background-color: transparent !important;
+    border: unset !important;
+    color: var(--vp-default-color) !important;
+    font-size: 18px;
+  }
+
+  thead, tbody tr {
+    border-bottom: 1px solid var(--vp-default-opacity-color) !important;
+  }
+}

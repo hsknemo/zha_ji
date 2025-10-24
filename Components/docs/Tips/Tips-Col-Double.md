@@ -1,0 +1,160 @@
+
+
+# 结果
+
+<ColDouble />
+
+:::code-group
+```html
+<div class="col_double_wrap">
+    <template
+            v-for="(item, index) in colData"
+    >
+        <div class="row-double"
+             :key="index"
+             v-if="item.length > 1"
+        >
+            <div  :key="idx"
+                  v-for="(it, idx) in item"
+                  class="row-item">
+                <div v-bind="item.leftStyle || {}" class="l">{{ it.label }}</div>
+                <div v-bind="item.rightStyle || {}" class="v">{{ it.value }}</div>
+            </div>
+        </div>
+        <div class="single-row"
+             :key="idx"
+             v-for="(it, idx) in item" v-else>
+            <div class="single-row-item">
+                <div v-bind="item.leftStyle || {}" class="l">{{ it.label }}</div>
+                <div v-bind="item.rightStyle || {}" class="v">{{ it.value }}</div>
+            </div>
+        </div>
+    </template>
+
+</div>
+```
+```scss
+<style scoped lang="scss">
+$font-color: #16CFF7;
+$font-size: 20px;
+$font-label-dir: right;
+@mixin flexStyle($align:'center', $justContent:'space-around') {
+  display: flex;
+  align-items: $align;
+  justify-content: $justContent;
+}
+.col_double_wrap {
+  .row-double , .row-item{
+    @include flexStyle();
+  }
+  .row-item {
+    margin-top: 10px;
+    &:first-child {
+      margin-right: 50px;
+    }
+    .l, .v {
+      width: 100px;
+      color: $font-color;
+      text-align: $font-label-dir;
+      font-size: $font-size;
+    }
+    .v {
+      width: 150px;
+      word-break: break-all;
+      text-align: justify;
+      color: #fff;
+    }
+    .l {
+      white-space: nowrap;
+      margin-right: 10px;
+    }
+  }
+
+  .single-row {
+    margin-top: 10px;
+    .single-row-item {
+      @include flexStyle();
+      .l {
+        width: 110px;
+        text-align: $font-label-dir;
+        white-space: nowrap;
+        font-size: $font-size;
+        color: $font-color;
+        margin-right: 10px;
+      }
+      .v {
+        font-size: $font-size;
+        color: #fff;
+      }
+
+    }
+  }
+}
+</style>
+```
+
+```js
+<script lang="ts">
+import {defineComponent} from 'vue'
+
+export default defineComponent({
+  name: "ColDouble",
+
+  data() {
+    return {
+      colData: [
+          [
+            {
+              label: '列1列1列1:',
+              prop: 'col1',
+              value: '值1值1值1值1值1值1值1值1'
+            },
+            {
+              label: '列2列2列2:',
+              prop: 'col2',
+              value: '值2值2值1值1值1值1值1值1'
+            },
+          ],
+        [
+          {
+            label: '列1列1列1:',
+            prop: 'col1',
+            value: '值1值1值1值1值1值1值1值1'
+          },
+          {
+            label: '列2列2列2:',
+            prop: 'col2',
+            value: '值2值2值1值1值1值1值1值1'
+          },
+        ],
+        [
+          {
+            label: '列1列1列1:',
+            prop: 'col1',
+            value: '值1值1值1值1值1值1值1值1'
+          },
+          {
+            label: '列2列2列2:',
+            prop: 'col2',
+            value: '值2值2值1值1值1值1值1值1'
+          },
+        ],
+
+        [
+          {
+            label: '单一Row:',
+            prop: 'col1',
+            value: '单一Row单一Row单一Row单一Row单一Row单一Row单一Row单一Row'
+          },
+        ],
+      ]
+    }
+  },
+})
+</script>
+```
+:::
+
+<script setup> 
+    import ColDouble from "../../playgroud/ColDouble.vue";
+</script>
