@@ -16,6 +16,7 @@ export default defineConfig({
       { text: 'Laugh', link: '/MapCore/intro.md' },
       { text: '课程笔记', link: '/Lesson/mapbox/create-point.md' },
       { text: 'ToneBox', link: '/Node/toneBox/intro.md' },
+      { text: 'upMD', link: '/ProfileLib/upMarkDown.md' },
     ],
 
     sidebar: route,

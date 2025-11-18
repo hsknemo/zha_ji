@@ -75,5 +75,13 @@ export default {
         { text: '台风半风圈', link: '/Map/tkLu/typhoon.md' },
       ]
     }
-  ]
+  ],
+  '/upMD/': [
+    {
+      text: 'upMD',
+      items: [
+        { text: '更新文档', link: '/ProfileLib/upMarkDown.md' },
+      ]
+    }
+  ],
 }
