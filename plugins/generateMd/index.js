@@ -2,8 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import explain from './mdExplain.js'
 import EventEmit  from './events'
+import pc from 'picocolors'
 
-
+const warning = (msg) => pc.bgYellowBright(pc.black(msg))
 
 let hasFileHistory = false
 /**
@@ -22,6 +23,10 @@ const createFileByObjContent = async (mdFilePath, historyPath, fileName) => {
   let lastMdRes = []
   let requireContent = (await import(historyPath)).default
   for (const requireContentKey in requireContent.mdContent) {
+    if (!explain[requireContentKey] && !requireContentKey.includes('用')) {
+      console.log(warning(` GENERATED WARNING: `) + '\r\n', `不支持：【${requireContentKey}】`)
+      continue
+    }
     let res = requireContent.mdContent
     let runRes
     if (requireContentKey == 'mdFileName') {
@@ -83,7 +88,11 @@ export default () => ({
         if (!filePath.includes('md.js')) return
 
         // 1. 读取文件内容
-        generateFile(filePath, server)
+        try {
+          await generateFile(filePath, server)
+        } catch (e) {
+          console.log('发生了异常', e)
+        }
       }
     });
   }

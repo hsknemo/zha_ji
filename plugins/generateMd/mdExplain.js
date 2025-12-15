@@ -108,16 +108,28 @@ const getPlayground = (obj, fileName, linkFilePath) => {
     return ''
   }
 
-  let str = (fs.readFileSync(path.join(__dirname, 'Playground.vue'))).toString()
+  // let str = (fs.readFileSync(path.join(__dirname, 'Playground.vue'))).toString()
+
+
 
   let fileContent = readFileObj(obj.file, fileName, linkFilePath)
-  console.log(fileContent, 'fileContent')
-  var codeS = "`"
-  var varibleObj = {}
+  const varibleObj = {};
   for (const fileContentKey in fileContent) {
     varibleObj[fileContentKey] = fileContent[fileContentKey]
   }
-  return eval(str)
+  let str =
+    `<Playground
+      :jsCode="jsCode"
+      :cssCode="cssCode"
+      :htmlCode="htmlCode"
+  />
+  
+  <script setup>
+  const jsCode =  ${'`'}${varibleObj.jsCode}${'`'}
+  const cssCode = ${'`'}${varibleObj.cssCode}${'`'}
+  const htmlCode =  ${'`'}${varibleObj.htmlCode}${'`'}
+  </script>`
+  return str
 }
 
 const getSingleCodeBlock = (obj) => {
@@ -140,6 +152,36 @@ const proxyType = (...args) => {
   if (args[args.length - 1]) {
     linkFileSet.add(linkPath)
   }
+}
+
+const _tabelFormat = arr => {
+  arr.forEach((item, index) => {
+    arr.splice(index, 1, '| ' + item + ' |')
+  })
+}
+
+const getTable = (obj) => {
+
+  let {列, 数据} = obj
+
+  let tableHeader = 列.map(item => item.label).join(' | ').split()
+
+  let tableHeaderLine = new Array(列.length).fill('---').join(' | ').split()
+  let tableBody = []
+  数据.forEach(item => {
+    let row = 列.map(it => item[it.prop])
+    tableBody.push(row.join(' | '))
+  })
+
+  _tabelFormat(tableHeader)
+  _tabelFormat(tableHeaderLine)
+  _tabelFormat(tableBody)
+
+  return `
+  ${tableHeader}
+  ${tableHeaderLine}
+  ${tableBody.join('\r\n')}
+  `
 }
 
 module.exports = {
@@ -177,4 +219,9 @@ module.exports = {
     console.log('解析', str)
     return str
   },
+  表格: (...args) => {
+    proxyType(...args)
+    return getTable(...args)
+  },
+  换行: () => '<br />'
 }

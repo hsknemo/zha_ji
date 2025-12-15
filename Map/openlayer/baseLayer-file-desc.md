@@ -64,9 +64,7 @@ class BaseLayer {
 - `tipsHeight`: 控制tips 高度 项目使用 `rem` 单位
 - `delay`: 配置图层`loadData`方法请求接口 `轮询`调用时间
 
-<div class="botm">
- 文档编辑时间 {{ processTime(new Date()) }}
-</div>
+
 
 <script setup>
  import moment from 'moment'

@@ -68,9 +68,7 @@ var extent = turf.bbox(layerSource) // 得到一个范围
 
 ```
 [fitBounts 配置项 ](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#fitbounds>)
-<div class="botm">
- 文档编辑时间 {{ processTime(new Date()) }}
-</div>
+
 
 <script setup>
  import moment from 'moment'

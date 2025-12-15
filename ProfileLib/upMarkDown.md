@@ -3,8 +3,6 @@
 ## 说明
 > upMD 是一个扩展的 markdown 语法，帮助更好的生成页面，依赖 ``markdown-it`` 渲染后的dom，进行dom 拦截节点替换，完成对应语法的操作。
 
-> 注意：由于语法限制 一下 涉及 ``语法"```" `` 统一使用``···`` 进行说明
-
 ## 安装
 
 ```shell
@@ -31,51 +29,59 @@ app.directive('highlight',function (el) {
 ## 在 markdown 文件中使用语法
 
 ### upBold: 加粗关键字
-```html
+````md
 
-···up-加粗文本
-文本内容
-···
+  ```up-加粗文本
+  文本内容
 
-```
+  ```
+````
 - 生成结果
 ![bold.png](img/bold.png)
 
 ### 高亮关键字
-```html
+````md
 
-···up-keyword
+```up-keyword
 文本 内容
-···
-
 ```
+
+````
+
 - 生成结果
+
 ![keyword.png](img/keyword.png)
 
 ### 动态高亮文本 生成渐变文本
-```html
 
-···up-animateText
+````md
+
+```up-animateText
 加油
-···
 ```
+````
+
 - 生成结果
   ![aniText.png](img/aniText.png)
 
 ### upAnchorKeyWord: a链接生成高亮
-```html
 
-···up-a https://github.com/hsknemo?tab=repositories | Git ···
-```
+````md
+
+```up-a https://github.com/hsknemo?tab=repositories | Git ```
+````
+
 - 生成结果
+
 > `` | `` 左侧是href 引入值，右侧是显示文本内容
 
  ![ancor.png](img/ancor.png)
 
 ### upMovieItem: 电影卡片
-```html
 
-···up-电影卡片
+````md
+
+```up-电影卡片
 | "导演": "弗兰克·德拉邦特",
 | "编剧": "弗兰克·德拉邦特/斯蒂芬·金",
 | "主演": "蒂姆·罗宾斯/摩根·弗里曼/鲍勃·冈顿/威廉·赛德勒/克兰西·布朗/吉尔·贝罗斯/马克·罗斯顿/詹姆斯·惠特摩/杰弗里·德曼/拉里·布兰登伯格/尼尔·吉恩托利/布赖恩·利比/大卫·普罗瓦尔/约瑟夫·劳格诺/祖德·塞克利拉/保罗·麦克兰尼/芮妮·布莱恩/阿方索·弗里曼/V·J·福斯特/弗兰克·梅德拉诺/马克·迈尔斯/尼尔·萨默斯/耐德·巴拉米/布赖恩·戴拉特/唐·麦克马纳斯",
@@ -92,18 +98,21 @@ app.directive('highlight',function (el) {
 | "影片海报": "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg",
 | "id": "1292052",
 | "影片地址": "https://movie.douban.com/subject/1292052/"
-···
 
 ```
+````
+
+
 - 生成结果
 ![movie.png](img/movie.png)
 
 ### upBreak: 换行标签生成
-```html
-···up-br
-···
+
+````md
+```up-br
 ```
+````
+
 - 生成结果
-```html
-<br/>
-```
+
+``<br />``
