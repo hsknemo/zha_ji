@@ -9,7 +9,7 @@
 <br/>
 
 <a style="display: flex; align-items: center" href='https://www.bilibili.com/video/BV1XrGFzBESG/?spm_id_from=333.1387.homepage.video_card.click&vd_source=6d401709c12c2c12d4ed83b1335b9d95' target='_blank'>
-<img style="display: block;margin-right: 10px; filter: grayscale(1)" width="20rem" height="20rem" src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico" alt="">课程地址
+<img style="display: block;margin-right: 10px;" width="20rem" height="20rem" src="/img/bilibili.svg" alt="">课程地址
 </a>
 
 - 1.引入撒点图标

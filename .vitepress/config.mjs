@@ -5,18 +5,18 @@ import generateMd from '../plugins/generateMd'
 import route from "./route.js";
 
 export default defineConfig({
-  title: "OhYo",
-  description: "OhYo是工作日记",
+  title: "雜記",
+  description: "",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '主页', link: '/' },
       { text: '组件库', link: '/Components/docs/Tips/Tips-Table.md' },
       { text: '地图项目', link: '/Map/openlayer/openlayer-introl.md' },
-      { text: 'Laugh', link: '/MapCore/intro.md' },
+      { text: '地图封装的一些东西', link: '/MapCore/intro.md' },
       { text: '课程笔记', link: '/Lesson/mapbox/create-point.md' },
-      { text: 'ToneBox', link: '/Node/toneBox/intro.md' },
-      { text: 'upMD', link: '/ProfileLib/upMarkDown.md' },
+      { text: 'Stone CLI', link: '/Node/toneBox/intro.md' },
+      { text: 'UPMD', link: '/ProfileLib/upMarkDown.md' },
     ],
 
     sidebar: route,
