@@ -55,7 +55,14 @@ const addWatchFile = fileName => {
         console.log('change txt', filePath)
         console.log(linkFileSet, 'linkFileSet')
         let link_f_set_arr = Array.from(linkFileSet)
+        console.log('run....', link_f_set_arr)
         let _filePath = link_f_set_arr.filter(item => item.includes(fileName))
+        console.log('文件。。。。', _filePath)
+        if (!_filePath.length) {
+          console.log('没有文件')
+          _filePath = link_f_set_arr
+        }
+        console.log('run 过滤....', _filePath)
         if (!_filePath.length) return
         EventEmit.emit('generate-link-file-change', _filePath[0])
       })
@@ -147,7 +154,6 @@ const getSingleCodeBlock = (obj) => {
 }
 
 const proxyType = (...args) => {
-  console.log(args, 'args')
   let linkPath = args[args.length - 1]
   if (args[args.length - 1]) {
     linkFileSet.add(linkPath)
@@ -213,10 +219,9 @@ module.exports = {
 
   原样输出: content => {
     let str = content
-        .split('\n')
-        .map(item => item.replace(/' '/g, '').trimStart())
-        .join('\n')
-    console.log('解析', str)
+      .split('\n')
+      .map(item => item.replace(/' '/g, '').trimStart())
+      .join('\n')
     return str
   },
   表格: (...args) => {
